@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { EmployeeDashboard } from "../pages/EmployeeDashboard/EmployeeDashboard";
 import { Login } from "../pages/Auth/Login/Login";
-import { AdminDashboard } from "../components/Admin/AdminDashboard";
+import { AdminDashboard } from "../pages/AdminDashboard/AdminDashboard";
 import { MainLayout } from "../layouts/MainLayout";
 
 export const MyRoutes = () => {

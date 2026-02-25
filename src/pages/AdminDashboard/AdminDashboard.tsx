@@ -1,5 +1,5 @@
-import { AdminToolbar } from "./AdminToolbar";
-import { EmployeesTable } from "./EmployeesTable";
+import { AdminToolbar } from "../../components/Admin/AdminToolbar";
+import { EmployeesTable } from "../../components/Admin/EmployeesTable";
 
 export const AdminDashboard = () => {
   return (

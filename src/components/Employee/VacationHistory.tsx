@@ -34,14 +34,30 @@ export const VacationHistory = () => {
 
         <tbody>
           {history.map((item) => (
-            <tr key={item.id} className="border-b text-sm">
-              <td className="py-3">{item.start}</td>
-              <td>{item.end}</td>
-              <td>{item.days}</td>
-              <td>
+            <tr
+              key={item.id}
+              className="group hover:bg-slate-50 transition-colors"
+            >
+              <td className="py-4 pl-4 font-medium text-slate-700">
+                {item.start}
+              </td>
+              <td className="py-4 text-slate-600">{item.end}</td>
+              <td className="py-4">
+                <span className="bg-slate-100 px-3 py-1 rounded-lg text-xs font-bold text-slate-600">
+                  {item.days} días
+                </span>
+              </td>
+              <td className="py-4 pr-4">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${item.status === "Aprobado" ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"}`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${
+                    item.status === "Aprobado"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-amber-100 text-amber-700"
+                  }`}
                 >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${item.status === "Aprobado" ? "bg-emerald-500" : "bg-amber-500"}`}
+                  />
                   {item.status}
                 </span>
               </td>
