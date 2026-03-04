@@ -1,4 +1,10 @@
-import { AlertCircle, ChevronLeft, ChevronRight, Pencil } from "lucide-react";
+import {
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import { useEmployeeList } from "../../hooks/useEmployeeList";
 import { useState } from "react";
 
@@ -153,6 +159,13 @@ export const EmployeesTable = () => {
                       transition-all hover:cursor-pointer"
                     >
                       <Pencil size={18} />
+                    </button>
+                    <button
+                      className="p-2 text-slate-400 
+                      hover:text-red-600 hover:bg-red-50 rounded-lg 
+                      transition-all hover:cursor-pointer"
+                    >
+                      <Trash size={18} />
                     </button>
                   </td>
                 </tr>
