@@ -161,7 +161,10 @@ export const EmployeesTable = () => {
         </table>
       </div>
       {!loading && !error && (
-        <div className="p-4 border-t border-slate-50 flex items-center justify-between bg-white">
+        <div
+          className="p-4 border-t border-slate-50 flex items-center 
+          justify-between bg-white"
+        >
           <p>
             Mostrando {indexOfFirstItem + 1} -{" "}
             {Math.min(indexOfLasItem, employeeList.length)} de{" "}
