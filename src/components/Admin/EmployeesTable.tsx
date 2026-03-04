@@ -19,8 +19,14 @@ export const EmployeesTable = () => {
   const totalPages = Math.ceil(employeeList.length / itemsPerPage);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-      <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+    <div
+      className="bg-white rounded-2xl border 
+      border-slate-100 shadow-sm overflow-hidden"
+    >
+      <div
+        className="p-6 border-b border-slate-50 flex 
+        justify-between items-center bg-slate-50/50"
+      >
         <div>
           <h3 className="text-xl font-bold text-slate-800">
             Listado de Empleados
@@ -101,7 +107,11 @@ export const EmployeesTable = () => {
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs uppercase">
+                      <div
+                        className="h-9 w-9 rounded-lg bg-blue-100 
+                        text-blue-700 flex items-center justify-center 
+                        font-bold text-xs uppercase"
+                      >
                         {emp.fullName.substring(0, 2)}
                       </div>
                       <div>
@@ -115,7 +125,10 @@ export const EmployeesTable = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="px-3 py-1 rounded-md bg-slate-100 text-slate-600 text-[11px] font-bold uppercase">
+                    <span
+                      className="px-3 py-1 rounded-md bg-slate-100 
+                    text-slate-600 text-[11px] font-bold uppercase"
+                    >
                       {emp.department}
                     </span>
                   </td>
@@ -123,7 +136,10 @@ export const EmployeesTable = () => {
                     {emp.yearsOfService}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="text-sm font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-lg">
+                    <span
+                      className="text-sm font-black text-blue-600 
+                      bg-blue-50 px-3 py-1 rounded-lg"
+                    >
                       {emp.totalVacationDays}{" "}
                       <span className="text-[10px] text-blue-400 italic">
                         días
@@ -131,7 +147,11 @@ export const EmployeesTable = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+                    <button
+                      className="p-2 text-slate-400 
+                      hover:text-blue-600 hover:bg-blue-50 rounded-lg 
+                      transition-all"
+                    >
                       <Pencil size={18} />
                     </button>
                   </td>
