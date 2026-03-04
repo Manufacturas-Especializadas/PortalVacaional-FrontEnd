@@ -13,3 +13,18 @@ export interface EmployeeList {
   yearsOfService: number;
   totalVacationDays: number;
 }
+
+export interface VacationBalance {
+  year: number;
+  assignedDays: number;
+}
+
+export interface UpdateEmployee {
+  id: number;
+  payRollNumber: number;
+  fullName: string;
+  department: string;
+  hireDate: string;
+  isActive: boolean;
+  balances: VacationBalance[];
+}
