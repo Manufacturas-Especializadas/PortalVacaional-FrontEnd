@@ -150,7 +150,7 @@ export const EmployeesTable = () => {
                     <button
                       className="p-2 text-slate-400 
                       hover:text-blue-600 hover:bg-blue-50 rounded-lg 
-                      transition-all"
+                      transition-all hover:cursor-pointer"
                     >
                       <Pencil size={18} />
                     </button>
