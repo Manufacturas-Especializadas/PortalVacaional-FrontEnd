@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { useEmployeeList } from "../../hooks/useEmployeeList";
 import { useState } from "react";
+import { useUpdateEmployee } from "../../hooks/useUpdateEmployee";
+import { EmployeeModal } from "./EmployeeModal";
 
 export const EmployeesTable = () => {
   const {
@@ -15,6 +17,31 @@ export const EmployeesTable = () => {
     loading,
     refresh,
   } = useEmployeeList();
+  const { updateEmployee, isUpdating } = useUpdateEmployee();
+
+  const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
+
+  const handleEditClick = (emp: any) => {
+    setSelectedEmployee({
+      id: emp.id,
+      payRollNumber: emp.payRollNumber,
+      fullName: emp.fullName,
+      department: emp.department,
+      totalVacationDays: emp.totalVacationDays,
+      hireDate: null,
+      isActive: true,
+      balances: [],
+    });
+  };
+
+  const handleSave = async (formData: any) => {
+    const success = await updateEmployee(formData.id, formData);
+
+    if (success) {
+      setSelectedEmployee(null);
+      refresh();
+    }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -154,6 +181,7 @@ export const EmployeesTable = () => {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
+                      onClick={() => handleEditClick(emp)}
                       className="p-2 text-slate-400 
                       hover:text-blue-600 hover:bg-blue-50 rounded-lg 
                       transition-all hover:cursor-pointer"
@@ -224,13 +252,14 @@ export const EmployeesTable = () => {
           </div>
         </div>
       )}
-      {/* {selectedEmployee && (
+      {selectedEmployee && (
         <EmployeeModal
           employee={selectedEmployee}
           onClose={() => setSelectedEmployee(null)}
           onSave={handleSave}
+          loading={isUpdating}
         />
-      )} */}
+      )}
     </div>
   );
 };
