@@ -7,6 +7,7 @@ export interface Employee {
 }
 
 export interface EmployeeList {
+  id: number;
   payRollNumber: number;
   fullName: string;
   department: string;
