@@ -5,9 +5,15 @@ interface Props {
   employee: any;
   onClose: () => void;
   onSave: (data: any) => void;
+  loading: boolean;
 }
 
-export const EmployeeModal = ({ employee, onClose, onSave }: Props) => {
+export const EmployeeModal = ({
+  employee,
+  onClose,
+  onSave,
+  loading,
+}: Props) => {
   const [form, setForm] = useState(employee);
 
   const handleChange = (field: string, value: any) => {
@@ -23,37 +29,41 @@ export const EmployeeModal = ({ employee, onClose, onSave }: Props) => {
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
         <h3 className="text-xl font-semibold mb-6">
-          {employee.nomina ? "Editar Empleado" : "Nuevo Empleado"}
+          {employee.id ? "Editar Empleado" : "Nuevo Empleado"}
         </h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Nómina"
             type="number"
-            value={form.nomina || ""}
-            onChange={(e) => handleChange("nomina", Number(e.target.value))}
+            value={form.payRollNumber || ""}
+            onChange={(e) =>
+              handleChange("payRollNumber", Number(e.target.value))
+            }
             required
           />
 
           <Input
             label="Nombre"
-            value={form.nombre}
-            onChange={(e) => handleChange("nombre", e.target.value)}
+            value={form.fullName || ""}
+            onChange={(e) => handleChange("fullName", e.target.value)}
             required
           />
 
           <Input
             label="Departamento"
-            value={form.depto}
-            onChange={(e) => handleChange("depto", e.target.value)}
+            value={form.department || ""}
+            onChange={(e) => handleChange("department", e.target.value)}
             required
           />
 
           <Input
             label="Total de Vacaciones"
             type="number"
-            value={form.total || ""}
-            onChange={(e) => handleChange("total", Number(e.target.value))}
+            value={form.totalVacationDays || ""}
+            onChange={(e) =>
+              handleChange("totalVacationDays", Number(e.target.value))
+            }
             required
           />
 
@@ -61,16 +71,20 @@ export const EmployeeModal = ({ employee, onClose, onSave }: Props) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg border hover:cursor-pointer"
+              className="px-6 py-2 rounded-xl border 
+              border-slate-200 font-semibold text-slate-600 
+              hover:bg-slate-50 transition-all hover:cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white 
-              hover:bg-blue-700 hover:cursor-pointer"
+              disabled={loading}
+              className="px-6 py-2 rounded-xl bg-blue-600 text-white 
+              font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 
+              transition-all disabled:opacity-50 hover:cursor-pointer"
             >
-              Guardar
+              {loading ? "Guardando..." : "Guardar Cambios"}
             </button>
           </div>
         </form>
