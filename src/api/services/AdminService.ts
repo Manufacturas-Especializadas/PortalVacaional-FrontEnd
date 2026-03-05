@@ -35,10 +35,7 @@ class AdminService {
   }
 
   async reactivateEmployee(id: number): Promise<void> {
-    return apiClient.patch<void>(
-      `${API_CONFIG.endpoints.admin.reactivate}${id}`,
-      {},
-    );
+    return apiClient.patch<void>(`${this.reactivateEmployeeEndpoint}${id}`, {});
   }
 }
 
