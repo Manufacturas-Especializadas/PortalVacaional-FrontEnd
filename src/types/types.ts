@@ -20,6 +20,13 @@ export interface VacationBalance {
   assignedDays: number;
 }
 
+export interface CreateEmployee {
+  payRollNumber: number;
+  fullName: string;
+  department: string;
+  hireDate: string;
+}
+
 export interface UpdateEmployee {
   id: number;
   payRollNumber: number;
