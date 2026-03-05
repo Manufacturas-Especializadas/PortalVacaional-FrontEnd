@@ -128,6 +128,7 @@ export const EmployeesTable = () => {
             >
               <th className="px-6 py-4">Empleado</th>
               <th className="px-6 py-4">Departamento</th>
+              <th className="px-6 py-4">Estado</th>
               <th className="px-6 py-4">Antigüedad</th>
               <th className="px-6 py-4 text-center">Vacaciones</th>
               <th className="px-6 py-4"></th>
@@ -175,19 +176,28 @@ export const EmployeesTable = () => {
               currentItems.map((emp) => (
                 <tr
                   key={emp.payRollNumber}
-                  className="hover:bg-blue-50/30 transition-colors group"
+                  className={`transition-colors group ${
+                    !emp.isActive
+                      ? "bg-slate-50/50 opacity-70"
+                      : "hover:bg-blue-50/50"
+                  }`}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div
-                        className="h-9 w-9 rounded-lg bg-blue-100 
-                        text-blue-700 flex items-center justify-center 
-                        font-bold text-xs uppercase"
+                        className={`h-9 w-9 rounded-lg flex items-center justify-center 
+                          font-bold text-xs uppercase ${
+                            !emp.isActive
+                              ? "bg-slate-200 text-slate-500"
+                              : "bg-blue-100 text-blue-700"
+                          }`}
                       >
                         {emp.fullName.substring(0, 2)}
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-700">
+                        <p
+                          className={`text-sm font-bold ${!emp.isActive ? "text-slate-500" : "text-slate-700"}`}
+                        >
                           {emp.fullName}
                         </p>
                         <p className="text-xs text-slate-400">
@@ -204,16 +214,30 @@ export const EmployeesTable = () => {
                       {emp.department}
                     </span>
                   </td>
+                  <td className="px-6 py-4 text-cente">
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        emp.isActive
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-slate-200 text-slate-600"
+                      }`}
+                    >
+                      {emp.isActive ? "Activo" : "Inactivo"}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-sm text-slate-500">
                     {emp.yearsOfService}
                   </td>
                   <td className="px-6 py-4 text-center">
                     <span
-                      className="text-sm font-black text-blue-600 
-                      bg-blue-50 px-3 py-1 rounded-lg"
+                      className={`text-sm font-black px-3 py-1 rounded-lg ${
+                        !emp.isActive
+                          ? "bg-slate-100 text-slate-400"
+                          : "bg-blue-50 text-blue-600"
+                      }`}
                     >
                       {emp.totalVacationDays}{" "}
-                      <span className="text-[10px] text-blue-400 italic">
+                      <span className="text-[10px] opacity-70 italic">
                         días
                       </span>
                     </span>

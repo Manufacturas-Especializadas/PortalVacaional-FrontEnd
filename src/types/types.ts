@@ -13,6 +13,7 @@ export interface EmployeeList {
   department: string;
   yearsOfService: number;
   totalVacationDays: number;
+  isActive: boolean;
 }
 
 export interface VacationBalance {
