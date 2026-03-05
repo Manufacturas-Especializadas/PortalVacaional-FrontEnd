@@ -9,6 +9,7 @@ export const API_CONFIG = {
   endpoints: {
     admin: {
       getEmployeesWithTheirDays: "/api/Admin/employees",
+      create: "/api/Admin/createEmployees",
       update: "/api/Admin/employees/",
     },
   },
