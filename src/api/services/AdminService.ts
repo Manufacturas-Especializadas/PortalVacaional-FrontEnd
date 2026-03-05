@@ -11,6 +11,7 @@ class AdminService {
     API_CONFIG.endpoints.admin.getEmployeesWithTheirDays;
   private createEmployeeEndpoint = API_CONFIG.endpoints.admin.create;
   private updateEmployeeEndpoint = API_CONFIG.endpoints.admin.update;
+  private deleteEmployeeEndpoint = API_CONFIG.endpoints.admin.delete;
 
   async getEmployeesList(): Promise<EmployeeList[]> {
     return apiClient.get<EmployeeList[]>(this.getEmployeesListEndpoint);
@@ -26,6 +27,10 @@ class AdminService {
       `${this.updateEmployeeEndpoint}${id}`,
       payload,
     );
+  }
+
+  async deleteEmployee(id: number): Promise<void> {
+    return apiClient.delete<void>(`${this.deleteEmployeeEndpoint}${id}`);
   }
 }
 

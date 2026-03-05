@@ -11,6 +11,7 @@ export const API_CONFIG = {
       getEmployeesWithTheirDays: "/api/Admin/employees",
       create: "/api/Admin/createEmployees",
       update: "/api/Admin/employees/",
+      delete: "/api/Admin/deleteEmployees/",
     },
   },
 };

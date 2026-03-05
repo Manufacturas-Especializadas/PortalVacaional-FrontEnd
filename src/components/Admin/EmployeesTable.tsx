@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useUpdateEmployee } from "../../hooks/useUpdateEmployee";
 import { EmployeeModal } from "./EmployeeModal";
 import { useCreateEmployee } from "../../hooks/useCreateEmployee";
+import { useDeleteEmployee } from "../../hooks/useDeleteEmployee";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 
 export const EmployeesTable = () => {
   const {
@@ -20,8 +22,11 @@ export const EmployeesTable = () => {
   } = useEmployeeList();
   const { createEmployee } = useCreateEmployee();
   const { updateEmployee, isUpdating } = useUpdateEmployee();
+  const { deleteEmployee } = useDeleteEmployee();
 
   const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState<any | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleAddClick = () => {
     setSelectedEmployee({
@@ -45,6 +50,20 @@ export const EmployeesTable = () => {
       isActive: true,
       balances: [],
     });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!employeeToDelete) return;
+
+    setIsDeleting(true);
+    const success = await deleteEmployee(employeeToDelete.id);
+
+    if (success) {
+      setEmployeeToDelete(null);
+      refresh();
+    }
+
+    setIsDeleting(false);
   };
 
   const handleSave = async (formData: any) => {
@@ -209,6 +228,7 @@ export const EmployeesTable = () => {
                       <Pencil size={18} />
                     </button>
                     <button
+                      onClick={() => setEmployeeToDelete(emp)}
                       className="p-2 text-slate-400 
                       hover:text-red-600 hover:bg-red-50 rounded-lg 
                       transition-all hover:cursor-pointer"
@@ -278,6 +298,15 @@ export const EmployeesTable = () => {
           onClose={() => setSelectedEmployee(null)}
           onSave={handleSave}
           loading={isUpdating}
+        />
+      )}
+
+      {employeeToDelete && (
+        <ConfirmDeleteModal
+          employeeName={employeeToDelete.fullName}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setEmployeeToDelete(null)}
+          loading={isDeleting}
         />
       )}
     </div>
