@@ -58,13 +58,20 @@ export const EmployeeModal = ({
           />
 
           <Input
+            label="Fecha de ingreso"
+            type="date"
+            value={form.hireDate ? form.hireDate.split("T")[0] : ""}
+            onChange={(e) => handleChange("hireDate", e.target.value)}
+            required
+          />
+
+          <Input
             label="Total de Vacaciones"
             type="number"
             value={form.totalVacationDays || ""}
             onChange={(e) =>
               handleChange("totalVacationDays", Number(e.target.value))
             }
-            required
           />
 
           <div className="flex justify-end gap-3 pt-4">
