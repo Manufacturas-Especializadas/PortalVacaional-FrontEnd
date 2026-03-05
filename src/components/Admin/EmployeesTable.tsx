@@ -9,6 +9,7 @@ import { useEmployeeList } from "../../hooks/useEmployeeList";
 import { useState } from "react";
 import { useUpdateEmployee } from "../../hooks/useUpdateEmployee";
 import { EmployeeModal } from "./EmployeeModal";
+import { useCreateEmployee } from "../../hooks/useCreateEmployee";
 
 export const EmployeesTable = () => {
   const {
@@ -17,9 +18,21 @@ export const EmployeesTable = () => {
     loading,
     refresh,
   } = useEmployeeList();
+  const { createEmployee } = useCreateEmployee();
   const { updateEmployee, isUpdating } = useUpdateEmployee();
 
   const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
+
+  const handleAddClick = () => {
+    setSelectedEmployee({
+      payRollNumber: 0,
+      fullName: "",
+      department: "",
+      hireDate: new Date().toISOString().split("T")[0],
+      isActive: true,
+      balances: [],
+    });
+  };
 
   const handleEditClick = (emp: any) => {
     setSelectedEmployee({
@@ -35,7 +48,13 @@ export const EmployeesTable = () => {
   };
 
   const handleSave = async (formData: any) => {
-    const success = await updateEmployee(formData.id, formData);
+    let success = false;
+
+    if (formData.id) {
+      success = await updateEmployee(formData.id, formData);
+    } else {
+      success = await createEmployee(formData);
+    }
 
     if (success) {
       setSelectedEmployee(null);
@@ -72,6 +91,7 @@ export const EmployeesTable = () => {
         </div>
 
         <button
+          onClick={handleAddClick}
           className="bg-slate-900 hover:bg-slate-800 text-white px-5 
           py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
           gap-2 hover:cursor-pointer"
