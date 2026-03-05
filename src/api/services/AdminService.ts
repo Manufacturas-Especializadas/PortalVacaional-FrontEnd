@@ -12,6 +12,7 @@ class AdminService {
   private createEmployeeEndpoint = API_CONFIG.endpoints.admin.create;
   private updateEmployeeEndpoint = API_CONFIG.endpoints.admin.update;
   private deleteEmployeeEndpoint = API_CONFIG.endpoints.admin.delete;
+  private reactivateEmployeeEndpoint = API_CONFIG.endpoints.admin.reactivate;
 
   async getEmployeesList(): Promise<EmployeeList[]> {
     return apiClient.get<EmployeeList[]>(this.getEmployeesListEndpoint);
@@ -31,6 +32,12 @@ class AdminService {
 
   async deleteEmployee(id: number): Promise<void> {
     return apiClient.delete<void>(`${this.deleteEmployeeEndpoint}${id}`);
+  }
+
+  async reactivateEmployee(id: number): Promise<void> {
+    return apiClient.patch<void>(
+      `${API_CONFIG.endpoints.admin.reactivate}${id}`,
+    );
   }
 }
 

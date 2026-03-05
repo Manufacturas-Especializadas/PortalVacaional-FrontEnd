@@ -12,6 +12,7 @@ export const API_CONFIG = {
       create: "/api/Admin/createEmployees",
       update: "/api/Admin/employees/",
       delete: "/api/Admin/deleteEmployees/",
+      reactivate: "/api/Admin/reactivateEmployee/",
     },
   },
 };

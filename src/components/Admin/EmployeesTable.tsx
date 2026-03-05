@@ -3,6 +3,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Pencil,
+  RefreshCw,
   Trash,
 } from "lucide-react";
 import { useEmployeeList } from "../../hooks/useEmployeeList";
@@ -12,6 +13,7 @@ import { EmployeeModal } from "./EmployeeModal";
 import { useCreateEmployee } from "../../hooks/useCreateEmployee";
 import { useDeleteEmployee } from "../../hooks/useDeleteEmployee";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
+import { useReactivateEmployee } from "../../hooks/useReactivateEmployee";
 
 export const EmployeesTable = () => {
   const {
@@ -23,6 +25,7 @@ export const EmployeesTable = () => {
   const { createEmployee } = useCreateEmployee();
   const { updateEmployee, isUpdating } = useUpdateEmployee();
   const { deleteEmployee } = useDeleteEmployee();
+  const { reactivateEmployee } = useReactivateEmployee();
 
   const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
   const [employeeToDelete, setEmployeeToDelete] = useState<any | null>(null);
@@ -64,6 +67,11 @@ export const EmployeesTable = () => {
     }
 
     setIsDeleting(false);
+  };
+
+  const handleReactivate = async (id: number) => {
+    const success = await reactivateEmployee(id);
+    if (success) refresh();
   };
 
   const handleSave = async (formData: any) => {
@@ -245,20 +253,30 @@ export const EmployeesTable = () => {
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => handleEditClick(emp)}
-                      className="p-2 text-slate-400 
-                      hover:text-blue-600 hover:bg-blue-50 rounded-lg 
+                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg
                       transition-all hover:cursor-pointer"
                     >
                       <Pencil size={18} />
                     </button>
-                    <button
-                      onClick={() => setEmployeeToDelete(emp)}
-                      className="p-2 text-slate-400 
-                      hover:text-red-600 hover:bg-red-50 rounded-lg 
-                      transition-all hover:cursor-pointer"
-                    >
-                      <Trash size={18} />
-                    </button>
+
+                    {emp.isActive ? (
+                      <button
+                        onClick={() => setEmployeeToDelete(emp)}
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg
+                        transition-all hover:cursor-pointer"
+                      >
+                        <Trash size={18} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleReactivate(emp.id)}
+                        className="p-2 text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg
+                        transition-all hover:cursor-pointer"
+                        title="Reactivar empleado"
+                      >
+                        <RefreshCw size={18} />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
