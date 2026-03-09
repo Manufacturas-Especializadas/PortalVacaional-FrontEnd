@@ -48,3 +48,12 @@ export interface Login {
   payRollNumber: number;
   password: string;
 }
+
+export interface LoginResponse {
+  token: string;
+  payRollNumber: number;
+  fullName: string;
+  roleId: number;
+  mustChangePassword: boolean;
+  email: string | null;
+}
