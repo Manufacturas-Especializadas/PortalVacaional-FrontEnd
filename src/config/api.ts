@@ -8,6 +8,7 @@ export const API_CONFIG = {
   baseUrl: API_BASE_URL,
   endpoints: {
     auth: {
+      login: "/api/Auth/login",
       setupProfile: "/api/Auth/setup-profile",
     },
     admin: {
