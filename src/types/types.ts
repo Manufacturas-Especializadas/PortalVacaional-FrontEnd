@@ -43,3 +43,8 @@ export interface SetupProfile {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface Login {
+  payRollNumber: number;
+  password: string;
+}
