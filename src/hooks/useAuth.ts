@@ -24,6 +24,7 @@ export const useAuth = () => {
       const response = await loginPromise;
 
       localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response));
 
       const decoded: any = jwtDecode(response.token);
       const userRole =
