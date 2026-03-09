@@ -37,3 +37,9 @@ export interface UpdateEmployee {
   isActive: boolean;
   balances: VacationBalance[];
 }
+
+export interface SetupProfile {
+  email: string;
+  newPassword: string;
+  confirmPassword: string;
+}
