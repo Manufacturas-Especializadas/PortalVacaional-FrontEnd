@@ -7,6 +7,9 @@ if (!API_BASE_URL) {
 export const API_CONFIG = {
   baseUrl: API_BASE_URL,
   endpoints: {
+    auth: {
+      setupProfile: "/api/Auth/setup-profile",
+    },
     admin: {
       getEmployeesWithTheirDays: "/api/Admin/employees",
       create: "/api/Admin/createEmployees",
