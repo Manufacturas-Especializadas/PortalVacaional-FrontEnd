@@ -57,3 +57,18 @@ export interface LoginResponse {
   mustChangePassword: boolean;
   email: string | null;
 }
+
+export interface VacationRequest {
+  id: number;
+  startDate: string;
+  endDate: string;
+  days: number;
+  status: string;
+}
+
+export interface EmployeeDashboardData {
+  totalDays: number;
+  usedDays: number;
+  availableDays: number;
+  history: VacationRequest[];
+}
