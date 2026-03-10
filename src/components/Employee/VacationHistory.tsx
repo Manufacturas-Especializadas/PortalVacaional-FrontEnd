@@ -1,23 +1,11 @@
 import { Calendar } from "lucide-react";
+import type { VacationRequest } from "../../types/types";
 
-export const VacationHistory = () => {
-  const history = [
-    {
-      id: 1,
-      start: "10 Ene 2025",
-      end: "15 Ene 2025",
-      days: 5,
-      status: "Aprobado",
-    },
-    {
-      id: 2,
-      start: "01 Mar 2025",
-      end: "03 Mar 2025",
-      days: 3,
-      status: "Pendiente",
-    },
-  ];
+interface Props {
+  history: VacationRequest[];
+}
 
+export const VacationHistory = ({ history }: Props) => {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-slate-100 flex items-center justify-between">
@@ -44,10 +32,10 @@ export const VacationHistory = () => {
                 <td className="px-6 py-5">
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold text-slate-700">
-                      Del {item.start}
+                      Del {item.startDate}
                     </span>
                     <span className="text-xs text-slate-400 font-medium">
-                      Al {item.end}
+                      Al {item.endDate}
                     </span>
                   </div>
                 </td>
