@@ -1,14 +1,17 @@
 import { PieChart, Clock, CalendarCheck } from "lucide-react";
 
-export const VacationStats = () => {
-  const total = 12;
-  const usados = 8;
-  const disponibles = total - usados;
+interface Props {
+  total: number;
+  used: number;
+}
+
+export const VacationStats = ({ total, used }: Props) => {
+  const available = total - used;
 
   const cards = [
     {
       label: "Días Disponibles",
-      value: disponibles,
+      value: available,
       icon: <CalendarCheck size={22} />,
       accent: "border-blue-600",
       textColor: "text-blue-600",
@@ -16,7 +19,7 @@ export const VacationStats = () => {
     },
     {
       label: "Días Usados",
-      value: usados,
+      value: used,
       icon: <Clock size={22} />,
       accent: "border-orange-500",
       textColor: "text-orange-600",
@@ -57,12 +60,12 @@ export const VacationStats = () => {
             <div className="mt-4">
               <div className="flex justify-between text-[10px] mb-1 font-bold text-slate-400 uppercase">
                 <span>Progreso</span>
-                <span>{Math.round((disponibles / total) * 100)}%</span>
+                <span>{Math.round((available / total) * 100)}%</span>
               </div>
               <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                 <div
                   className="bg-blue-600 h-full transition-all duration-700 ease-out"
-                  style={{ width: `${(disponibles / total) * 100}%` }}
+                  style={{ width: `${(available / total) * 100}%` }}
                 />
               </div>
             </div>

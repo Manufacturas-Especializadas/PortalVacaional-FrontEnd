@@ -18,5 +18,8 @@ export const API_CONFIG = {
       delete: "/api/Admin/deleteEmployees/",
       reactivate: "/api/Admin/reactivateEmployee/",
     },
+    employee: {
+      getDashboard: "/api/Employee/dashboard",
+    },
   },
 };
