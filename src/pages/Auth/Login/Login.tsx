@@ -1,17 +1,27 @@
 import { useState, type SyntheticEvent } from "react";
 import { AuthLayout } from "../../../layouts/AuthLayout";
 import { Input } from "../../../components/CustomInputs/Input";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const [payrollNumber, setPayrollNumber] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const { login, isLoading } = useAuth();
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ payrollNumber, password });
-    navigate("/empleado-dashboard");
+
+    if (!payrollNumber || !password) {
+      toast.error("Por favor completa todos los campos");
+
+      return;
+    }
+
+    await login({
+      payRollNumber: Number(payrollNumber),
+      password,
+    });
   };
 
   return (
@@ -29,6 +39,7 @@ export const Login = () => {
               label="Número de nómina"
               value={payrollNumber}
               onChange={(e) => setPayrollNumber(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
@@ -38,16 +49,22 @@ export const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 
-          text-white py-3 rounded-lg font-semibold transition 
-            duration-200 hover:cursor-pointer"
+            disabled={isLoading}
+            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-3 
+            rounded-xl font-bold transition-all duration-200 shadow-lg 
+            shadow-blue-200 active:scale-[0.98] ${
+              isLoading
+                ? "opacity-70 cursor-not-allowed"
+                : "hover:cursor-pointer"
+            }`}
           >
-            Iniciar Sesión
+            {isLoading ? "Validando..." : "Iniciar Sesión"}
           </button>
         </form>
       </div>

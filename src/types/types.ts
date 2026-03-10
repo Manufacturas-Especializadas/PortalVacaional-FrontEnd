@@ -7,9 +7,53 @@ export interface Employee {
 }
 
 export interface EmployeeList {
+  id: number;
   payRollNumber: number;
   fullName: string;
   department: string;
   yearsOfService: number;
   totalVacationDays: number;
+  isActive: boolean;
+}
+
+export interface VacationBalance {
+  year: number;
+  assignedDays: number;
+}
+
+export interface CreateEmployee {
+  payRollNumber: number;
+  fullName: string;
+  department: string;
+  hireDate: string;
+}
+
+export interface UpdateEmployee {
+  id: number;
+  payRollNumber: number;
+  fullName: string;
+  department: string;
+  hireDate: string;
+  isActive: boolean;
+  balances: VacationBalance[];
+}
+
+export interface SetupProfile {
+  email: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface Login {
+  payRollNumber: number;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  payRollNumber: number;
+  fullName: string;
+  roleId: number;
+  mustChangePassword: boolean;
+  email: string | null;
 }

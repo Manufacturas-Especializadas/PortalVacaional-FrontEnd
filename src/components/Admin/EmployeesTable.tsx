@@ -3,10 +3,17 @@ import {
   ChevronLeft,
   ChevronRight,
   Pencil,
+  RefreshCw,
   Trash,
 } from "lucide-react";
 import { useEmployeeList } from "../../hooks/useEmployeeList";
 import { useState } from "react";
+import { useUpdateEmployee } from "../../hooks/useUpdateEmployee";
+import { EmployeeModal } from "./EmployeeModal";
+import { useCreateEmployee } from "../../hooks/useCreateEmployee";
+import { useDeleteEmployee } from "../../hooks/useDeleteEmployee";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
+import { useReactivateEmployee } from "../../hooks/useReactivateEmployee";
 
 export const EmployeesTable = () => {
   const {
@@ -15,6 +22,72 @@ export const EmployeesTable = () => {
     loading,
     refresh,
   } = useEmployeeList();
+  const { createEmployee } = useCreateEmployee();
+  const { updateEmployee, isUpdating } = useUpdateEmployee();
+  const { deleteEmployee } = useDeleteEmployee();
+  const { reactivateEmployee } = useReactivateEmployee();
+
+  const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState<any | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleAddClick = () => {
+    setSelectedEmployee({
+      payRollNumber: 0,
+      fullName: "",
+      department: "",
+      hireDate: new Date().toISOString().split("T")[0],
+      isActive: true,
+      balances: [],
+    });
+  };
+
+  const handleEditClick = (emp: any) => {
+    setSelectedEmployee({
+      id: emp.id,
+      payRollNumber: emp.payRollNumber,
+      fullName: emp.fullName,
+      department: emp.department,
+      totalVacationDays: emp.totalVacationDays,
+      hireDate: null,
+      isActive: true,
+      balances: [],
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!employeeToDelete) return;
+
+    setIsDeleting(true);
+    const success = await deleteEmployee(employeeToDelete.id);
+
+    if (success) {
+      setEmployeeToDelete(null);
+      refresh();
+    }
+
+    setIsDeleting(false);
+  };
+
+  const handleReactivate = async (id: number) => {
+    const success = await reactivateEmployee(id);
+    if (success) refresh();
+  };
+
+  const handleSave = async (formData: any) => {
+    let success = false;
+
+    if (formData.id) {
+      success = await updateEmployee(formData.id, formData);
+    } else {
+      success = await createEmployee(formData);
+    }
+
+    if (success) {
+      setSelectedEmployee(null);
+      refresh();
+    }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -45,6 +118,7 @@ export const EmployeesTable = () => {
         </div>
 
         <button
+          onClick={handleAddClick}
           className="bg-slate-900 hover:bg-slate-800 text-white px-5 
           py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
           gap-2 hover:cursor-pointer"
@@ -62,6 +136,7 @@ export const EmployeesTable = () => {
             >
               <th className="px-6 py-4">Empleado</th>
               <th className="px-6 py-4">Departamento</th>
+              <th className="px-6 py-4">Estado</th>
               <th className="px-6 py-4">Antigüedad</th>
               <th className="px-6 py-4 text-center">Vacaciones</th>
               <th className="px-6 py-4"></th>
@@ -109,19 +184,28 @@ export const EmployeesTable = () => {
               currentItems.map((emp) => (
                 <tr
                   key={emp.payRollNumber}
-                  className="hover:bg-blue-50/30 transition-colors group"
+                  className={`transition-colors group ${
+                    !emp.isActive
+                      ? "bg-slate-50/50 opacity-70"
+                      : "hover:bg-blue-50/50"
+                  }`}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div
-                        className="h-9 w-9 rounded-lg bg-blue-100 
-                        text-blue-700 flex items-center justify-center 
-                        font-bold text-xs uppercase"
+                        className={`h-9 w-9 rounded-lg flex items-center justify-center 
+                          font-bold text-xs uppercase ${
+                            !emp.isActive
+                              ? "bg-slate-200 text-slate-500"
+                              : "bg-blue-100 text-blue-700"
+                          }`}
                       >
                         {emp.fullName.substring(0, 2)}
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-700">
+                        <p
+                          className={`text-sm font-bold ${!emp.isActive ? "text-slate-500" : "text-slate-700"}`}
+                        >
                           {emp.fullName}
                         </p>
                         <p className="text-xs text-slate-400">
@@ -138,35 +222,61 @@ export const EmployeesTable = () => {
                       {emp.department}
                     </span>
                   </td>
+                  <td className="px-6 py-4 text-cente">
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        emp.isActive
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-slate-200 text-slate-600"
+                      }`}
+                    >
+                      {emp.isActive ? "Activo" : "Inactivo"}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-sm text-slate-500">
                     {emp.yearsOfService}
                   </td>
                   <td className="px-6 py-4 text-center">
                     <span
-                      className="text-sm font-black text-blue-600 
-                      bg-blue-50 px-3 py-1 rounded-lg"
+                      className={`text-sm font-black px-3 py-1 rounded-lg ${
+                        !emp.isActive
+                          ? "bg-slate-100 text-slate-400"
+                          : "bg-blue-50 text-blue-600"
+                      }`}
                     >
                       {emp.totalVacationDays}{" "}
-                      <span className="text-[10px] text-blue-400 italic">
+                      <span className="text-[10px] opacity-70 italic">
                         días
                       </span>
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
-                      className="p-2 text-slate-400 
-                      hover:text-blue-600 hover:bg-blue-50 rounded-lg 
+                      onClick={() => handleEditClick(emp)}
+                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg
                       transition-all hover:cursor-pointer"
                     >
                       <Pencil size={18} />
                     </button>
-                    <button
-                      className="p-2 text-slate-400 
-                      hover:text-red-600 hover:bg-red-50 rounded-lg 
-                      transition-all hover:cursor-pointer"
-                    >
-                      <Trash size={18} />
-                    </button>
+
+                    {emp.isActive ? (
+                      <button
+                        onClick={() => setEmployeeToDelete(emp)}
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg
+                        transition-all hover:cursor-pointer"
+                      >
+                        <Trash size={18} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleReactivate(emp.id)}
+                        className="p-2 text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg
+                        transition-all hover:cursor-pointer"
+                        title="Reactivar empleado"
+                      >
+                        <RefreshCw size={18} />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -224,13 +334,23 @@ export const EmployeesTable = () => {
           </div>
         </div>
       )}
-      {/* {selectedEmployee && (
+      {selectedEmployee && (
         <EmployeeModal
           employee={selectedEmployee}
           onClose={() => setSelectedEmployee(null)}
           onSave={handleSave}
+          loading={isUpdating}
         />
-      )} */}
+      )}
+
+      {employeeToDelete && (
+        <ConfirmDeleteModal
+          employeeName={employeeToDelete.fullName}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setEmployeeToDelete(null)}
+          loading={isDeleting}
+        />
+      )}
     </div>
   );
 };
