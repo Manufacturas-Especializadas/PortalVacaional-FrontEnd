@@ -20,6 +20,7 @@ export const API_CONFIG = {
     },
     employee: {
       getDashboard: "/api/Employee/dashboard",
+      requestVacation: "/api/Employee/request-vacation",
     },
   },
 };
