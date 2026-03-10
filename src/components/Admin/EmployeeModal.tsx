@@ -16,8 +16,45 @@ export const EmployeeModal = ({
 }: Props) => {
   const [form, setForm] = useState(employee);
 
+  const calculateVacationDays = (hireDate: string): number => {
+    if (!hireDate) return 0;
+
+    const start = new Date(hireDate);
+    const today = new Date();
+    let years = today.getFullYear() - start.getFullYear();
+
+    const monthDiff = today.getMonth() - start.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < start.getDate())
+    ) {
+      years--;
+    }
+
+    if (years < 1) return 0;
+    if (years === 1) return 12;
+    if (years === 2) return 14;
+    if (years === 3) return 16;
+    if (years === 4) return 18;
+    if (years === 5) return 20;
+    if (years >= 6 && years <= 10) return 22;
+    if (years >= 11 && years <= 15) return 24;
+    if (years >= 16 && years <= 20) return 26;
+    if (years >= 21 && years <= 25) return 28;
+    if (years >= 26 && years <= 30) return 30;
+
+    return 32;
+  };
+
   const handleChange = (field: string, value: any) => {
-    setForm({ ...form, [field]: value });
+    const newForm = { ...form, [field]: value };
+
+    if (field === "hireDate") {
+      newForm.totalVacationDays = calculateVacationDays(value);
+    }
+
+    setForm(newForm);
   };
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
@@ -65,14 +102,17 @@ export const EmployeeModal = ({
             required
           />
 
-          <Input
-            label="Total de Vacaciones"
-            type="number"
-            value={form.totalVacationDays || ""}
-            onChange={(e) =>
-              handleChange("totalVacationDays", Number(e.target.value))
-            }
-          />
+          <div className="relative">
+            <Input
+              label="Total de Vacaciones"
+              type="number"
+              value={form.totalVacationDays || ""}
+              onChange={(e) =>
+                handleChange("totalVacationDays", Number(e.target.value))
+              }
+              disabled
+            />
+          </div>
 
           <div className="flex justify-end gap-3 pt-4">
             <button
