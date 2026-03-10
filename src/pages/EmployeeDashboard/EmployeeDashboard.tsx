@@ -1,8 +1,14 @@
 import { VacationForm } from "../../components/Employee/VacationForm";
 import { VacationHistory } from "../../components/Employee/VacationHistory";
 import { VacationStats } from "../../components/Employee/VacationStats";
+import { useEmployeeDashboard } from "../../hooks/useEmployeeDashboard";
 
 export const EmployeeDashboard = () => {
+  const { data, loading } = useEmployeeDashboard();
+
+  if (loading)
+    return <div className="p-10 text-center">Cargando tu información</div>;
+
   return (
     <div
       className="min-h-screen bg-[#f8fafc] 
@@ -21,14 +27,17 @@ export const EmployeeDashboard = () => {
           <div className="h-px flex-1 bg-slate-200 mx-8 hidden lg:block mb-3" />
         </header>
 
-        <VacationStats />
+        <VacationStats
+          total={data?.totalDays || 0}
+          used={data?.usedDays || 0}
+        />
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
           <aside className="xl:col-span-4">
             <VacationForm />
           </aside>
           <main className="xl:col-span-8">
-            <VacationHistory />
+            <VacationHistory history={data?.history || []} />
           </main>
         </div>
       </div>
