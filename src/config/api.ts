@@ -23,5 +23,8 @@ export const API_CONFIG = {
       getDashboard: "/api/Employee/dashboard",
       requestVacation: "/api/Employee/request-vacation",
     },
+    managers: {
+      getManagers: "/api/Admin/departmentHead-managers",
+    },
   },
 };
