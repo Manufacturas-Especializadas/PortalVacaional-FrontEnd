@@ -5,6 +5,8 @@ import {
   Pencil,
   RefreshCw,
   Trash,
+  UserPlus,
+  Users,
 } from "lucide-react";
 import { useEmployeeList } from "../../hooks/useEmployeeList";
 import { useState } from "react";
@@ -14,6 +16,7 @@ import { useCreateEmployee } from "../../hooks/useCreateEmployee";
 import { useDeleteEmployee } from "../../hooks/useDeleteEmployee";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import { useReactivateEmployee } from "../../hooks/useReactivateEmployee";
+import { useNavigate } from "react-router-dom";
 
 export const EmployeesTable = () => {
   const {
@@ -98,6 +101,8 @@ export const EmployeesTable = () => {
   const currentItems = employeeList.slice(indexOfFirstItem, indexOfLasItem);
   const totalPages = Math.ceil(employeeList.length / itemsPerPage);
 
+  const navigate = useNavigate();
+
   return (
     <div
       className="bg-white rounded-2xl border 
@@ -118,14 +123,27 @@ export const EmployeesTable = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleAddClick}
-          className="bg-slate-900 hover:bg-slate-800 text-white px-5 
-          py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
-          gap-2 hover:cursor-pointer"
-        >
-          <span>+</span> Nuevo Empleado
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => navigate("/managers")}
+            className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 
+            py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
+            gap-2 hover:cursor-pointer shadow-sm"
+          >
+            <Users size={18} className="text-blue-600" />
+            Jefes y Gerentes
+          </button>
+
+          <button
+            onClick={handleAddClick}
+            className="bg-slate-900 hover:bg-slate-800 text-white px-5 
+            py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
+            gap-2 hover:cursor-pointer shadow-lg shadow-slate-200"
+          >
+            <UserPlus size={18} />
+            Nuevo Empleado
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
