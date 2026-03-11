@@ -2,17 +2,23 @@ import { API_CONFIG } from "../../config/api";
 import type {
   CreateEmployee,
   EmployeeList,
+  Roles,
   UpdateEmployee,
 } from "../../types/types";
 import { apiClient } from "../client";
 
 class AdminService {
+  private getRolesEndpoint = API_CONFIG.endpoints.admin.getRoles;
   private getEmployeesListEndpoint =
     API_CONFIG.endpoints.admin.getEmployeesWithTheirDays;
   private createEmployeeEndpoint = API_CONFIG.endpoints.admin.create;
   private updateEmployeeEndpoint = API_CONFIG.endpoints.admin.update;
   private deleteEmployeeEndpoint = API_CONFIG.endpoints.admin.delete;
   private reactivateEmployeeEndpoint = API_CONFIG.endpoints.admin.reactivate;
+
+  async getRoles(): Promise<Roles[]> {
+    return apiClient.get<Roles[]>(this.getRolesEndpoint);
+  }
 
   async getEmployeesList(): Promise<EmployeeList[]> {
     return apiClient.get<EmployeeList[]>(this.getEmployeesListEndpoint);
