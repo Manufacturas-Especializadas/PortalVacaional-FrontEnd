@@ -25,8 +25,6 @@ export const EmployeeModal = ({
     [data],
   );
 
-  console.log("Datos del empleado recibidos:", employee);
-
   const calculateVacationDays = (hireDate: string): number => {
     if (!hireDate) return 0;
 
