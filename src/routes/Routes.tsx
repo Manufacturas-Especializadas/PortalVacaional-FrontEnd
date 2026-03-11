@@ -5,6 +5,7 @@ import { AdminDashboard } from "../pages/AdminDashboard/AdminDashboard";
 import { MainLayout } from "../layouts/MainLayout";
 import { SetupProfile } from "../pages/SetupProfile/SetupProfile";
 import { ProtectedRoute } from "../components/ProtectedRoute/ProtectedRoute";
+import { ManagerTable } from "../components/Admin/ManagerTable";
 
 export const MyRoutes = () => {
   return (
@@ -18,6 +19,7 @@ export const MyRoutes = () => {
       <Route element={<MainLayout />}>
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/managers" element={<ManagerTable />} />
         </Route>
 
         <Route
