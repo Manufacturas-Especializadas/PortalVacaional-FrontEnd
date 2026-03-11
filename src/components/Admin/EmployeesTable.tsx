@@ -48,10 +48,11 @@ export const EmployeesTable = () => {
       payRollNumber: emp.payRollNumber,
       fullName: emp.fullName,
       department: emp.department,
+      roleId: emp.roleId,
       totalVacationDays: emp.totalVacationDays,
-      hireDate: null,
-      isActive: true,
-      balances: [],
+      hireDate: emp.hireDate || null,
+      isActive: emp.isActive,
+      balances: emp.balances || [],
     });
   };
 
