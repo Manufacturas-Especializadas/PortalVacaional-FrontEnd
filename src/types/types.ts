@@ -3,6 +3,11 @@ export interface Roles {
   name: string;
 }
 
+export interface ManagerSelect {
+  id: number;
+  fullName: string;
+}
+
 export interface Employee {
   nomina: number;
   nombre: string;
