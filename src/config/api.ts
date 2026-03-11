@@ -12,6 +12,7 @@ export const API_CONFIG = {
       setupProfile: "/api/Auth/setup-profile",
     },
     admin: {
+      getRoles: "/api/Admin/roles",
       getEmployeesWithTheirDays: "/api/Admin/employees",
       create: "/api/Admin/createEmployees",
       update: "/api/Admin/employees/",
