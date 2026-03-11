@@ -2,6 +2,7 @@ import { useMemo, useState, type SyntheticEvent } from "react";
 import { Input } from "../CustomInputs/Input";
 import { useRoles } from "../../hooks/useRoles";
 import { FloatingSelect } from "../CustomInputs/FloatingSelect";
+import { useManagerSelect } from "../../hooks/useManagerSelect";
 
 interface Props {
   employee: any;
@@ -19,10 +20,16 @@ export const EmployeeModal = ({
   const [form, setForm] = useState(employee);
 
   const { data, loading: loadingRole } = useRoles();
+  const { data: managers, loading: loadingManager } = useManagerSelect();
 
   const roleOptions = useMemo(
     () => data.map((r) => ({ label: r.name, value: r.id })),
     [data],
+  );
+
+  const managerOptions = useMemo(
+    () => managers.map((m) => ({ label: m.fullName, value: m.id })),
+    [managers],
   );
 
   const calculateVacationDays = (hireDate: string): number => {
@@ -111,6 +118,13 @@ export const EmployeeModal = ({
               onChange={(val) => handleChange("roleId", val)}
             />
           )}
+
+          <FloatingSelect
+            label={loadingManager ? "Cargando datos..." : "Jefe Directo"}
+            value={form.managerId || ""}
+            options={managerOptions}
+            onChange={(val) => handleChange("managerId", val)}
+          />
 
           <Input
             label="Fecha de ingreso"
