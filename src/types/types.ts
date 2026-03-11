@@ -22,6 +22,21 @@ export interface EmployeeList {
   isActive: boolean;
 }
 
+export interface ManagersList {
+  id: number;
+  payRollNumber: number;
+  fullName: string;
+  email: string;
+  roleId: number;
+  roleName: string;
+  department: string;
+  departmentId: number;
+  yearsOfService: number;
+  hireDate: string;
+  totalVacationDays: number;
+  isActive: boolean;
+}
+
 export interface VacationBalance {
   year: number;
   assignedDays: number;
