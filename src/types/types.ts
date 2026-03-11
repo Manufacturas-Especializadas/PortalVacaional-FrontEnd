@@ -1,3 +1,8 @@
+export interface Roles {
+  id: number;
+  name: string;
+}
+
 export interface Employee {
   nomina: number;
   nombre: string;
@@ -11,6 +16,7 @@ export interface EmployeeList {
   payRollNumber: number;
   fullName: string;
   department: string;
+  roleId: number;
   yearsOfService: number;
   totalVacationDays: number;
   isActive: boolean;
@@ -33,6 +39,7 @@ export interface UpdateEmployee {
   payRollNumber: number;
   fullName: string;
   department: string;
+  roleId: number;
   hireDate: string;
   isActive: boolean;
   balances: VacationBalance[];
