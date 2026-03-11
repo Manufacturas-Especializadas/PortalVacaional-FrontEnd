@@ -1,5 +1,7 @@
-import { useState, type SyntheticEvent } from "react";
+import { useMemo, useState, type SyntheticEvent } from "react";
 import { Input } from "../CustomInputs/Input";
+import { useRoles } from "../../hooks/useRoles";
+import { FloatingSelect } from "../CustomInputs/FloatingSelect";
 
 interface Props {
   employee: any;
@@ -15,6 +17,15 @@ export const EmployeeModal = ({
   loading,
 }: Props) => {
   const [form, setForm] = useState(employee);
+
+  const { data, loading: loadingRole } = useRoles();
+
+  const roleOptions = useMemo(
+    () => data.map((r) => ({ label: r.name, value: r.id })),
+    [data],
+  );
+
+  console.log("Datos del empleado recibidos:", employee);
 
   const calculateVacationDays = (hireDate: string): number => {
     if (!hireDate) return 0;
@@ -93,6 +104,15 @@ export const EmployeeModal = ({
             onChange={(e) => handleChange("department", e.target.value)}
             required
           />
+
+          {employee.id && (
+            <FloatingSelect
+              label={loadingRole ? "Cargando roles..." : "Rol"}
+              value={form.roleId || ""}
+              options={roleOptions}
+              onChange={(val) => handleChange("roleId", val)}
+            />
+          )}
 
           <Input
             label="Fecha de ingreso"
