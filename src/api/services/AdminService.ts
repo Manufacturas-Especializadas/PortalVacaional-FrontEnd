@@ -2,6 +2,7 @@ import { API_CONFIG } from "../../config/api";
 import type {
   CreateEmployee,
   EmployeeList,
+  ManagerSelect,
   ManagersList,
   Roles,
   UpdateEmployee,
@@ -11,6 +12,8 @@ import { apiClient } from "../client";
 class AdminService {
   private getManagersEndpoint = API_CONFIG.endpoints.managers.getManagers;
   private getRolesEndpoint = API_CONFIG.endpoints.admin.getRoles;
+  private getManagerSelectEndpoint =
+    API_CONFIG.endpoints.managers.getManagersSelect;
   private getEmployeesListEndpoint =
     API_CONFIG.endpoints.admin.getEmployeesWithTheirDays;
   private createEmployeeEndpoint = API_CONFIG.endpoints.admin.create;
@@ -20,6 +23,10 @@ class AdminService {
 
   async getRoles(): Promise<Roles[]> {
     return apiClient.get<Roles[]>(this.getRolesEndpoint);
+  }
+
+  async getManagerSelect(): Promise<ManagerSelect[]> {
+    return apiClient.get<ManagerSelect[]>(this.getManagerSelectEndpoint);
   }
 
   async getEmployeesList(): Promise<EmployeeList[]> {
