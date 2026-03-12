@@ -39,8 +39,9 @@ export const EmployeesTable = () => {
       payRollNumber: 0,
       fullName: "",
       department: "",
+      roleId: 2,
       managerId: 0,
-      hireDate: new Date().toISOString().split("T")[0],
+      hireDate: "",
       isActive: true,
       balances: [],
     });
@@ -83,10 +84,38 @@ export const EmployeesTable = () => {
   const handleSave = async (formData: any) => {
     let success = false;
 
+    const commonData = {
+      payRollNumber: Number(formData.payRollNumber),
+      fullName: formData.fullName.trim(),
+      department: formData.department,
+      email: formData.email || "",
+      roleId: formData.roleId ? Number(formData.roleId) : 2,
+      managerId:
+        formData.managerId && formData.managerId !== 0
+          ? Number(formData.managerId)
+          : null,
+      hireDate: formData.hireDate.includes("T")
+        ? formData.hireDate
+        : `${formData.hireDate}T00:00:00.000Z`,
+      isActive: formData.isActive ?? true,
+      balances:
+        formData.balances && formData.balances.length > 0
+          ? formData.balances
+          : [
+              {
+                year: new Date().getFullYear(),
+                assignedDays: formData.totalVacationDays || 0,
+              },
+            ],
+    };
+
+    console.log("Dato a enviar: ", commonData);
+
     if (formData.id) {
-      success = await updateEmployee(formData.id, formData);
+      const dataToUpdate = { ...commonData, id: formData.id };
+      success = await updateEmployee(formData.id, dataToUpdate);
     } else {
-      success = await createEmployee(formData);
+      success = await createEmployee(commonData);
     }
 
     if (success) {
