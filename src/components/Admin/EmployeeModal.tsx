@@ -67,7 +67,21 @@ export const EmployeeModal = ({
     const newForm = { ...form, [field]: value };
 
     if (field === "hireDate") {
-      newForm.totalVacationDays = calculateVacationDays(value);
+      const days = calculateVacationDays(value);
+      const currentYear = new Date().getFullYear();
+
+      newForm.totalVacationDays = days;
+
+      const balances = [...(form.balances || [])];
+      const yearIndex = balances.findIndex((b: any) => b.year === currentYear);
+
+      if (yearIndex > -1) {
+        balances[yearIndex] = { ...balances[yearIndex], assignedDays: days };
+      } else {
+        balances.push({ year: currentYear, assignedDays: days });
+      }
+
+      newForm.balances = balances;
     }
 
     setForm(newForm);
