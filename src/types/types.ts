@@ -51,7 +51,14 @@ export interface CreateEmployee {
   payRollNumber: number;
   fullName: string;
   department: string;
+  email: string;
+  managerId: number | null;
+  roleId: number;
   hireDate: string;
+  balances: {
+    year: number;
+    assignedDays: number;
+  }[];
 }
 
 export interface UpdateEmployee {
