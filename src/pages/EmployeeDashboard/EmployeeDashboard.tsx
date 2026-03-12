@@ -4,7 +4,7 @@ import { VacationStats } from "../../components/Employee/VacationStats";
 import { useEmployeeDashboard } from "../../hooks/useEmployeeDashboard";
 
 export const EmployeeDashboard = () => {
-  const { data, loading } = useEmployeeDashboard();
+  const { data, loading, refresh } = useEmployeeDashboard();
 
   if (loading)
     return <div className="p-10 text-center">Cargando tu información</div>;
@@ -34,7 +34,7 @@ export const EmployeeDashboard = () => {
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
           <aside className="xl:col-span-4">
-            <VacationForm />
+            <VacationForm onRecordCreated={refresh} />
           </aside>
           <main className="xl:col-span-8">
             <VacationHistory history={data?.history || []} />
