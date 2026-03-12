@@ -124,14 +124,12 @@ export const EmployeeModal = ({
             required
           />
 
-          {employee.id && (
-            <FloatingSelect
-              label={loadingRole ? "Cargando roles..." : "Rol"}
-              value={form.roleId || ""}
-              options={roleOptions}
-              onChange={(val) => handleChange("roleId", val)}
-            />
-          )}
+          <FloatingSelect
+            label={loadingRole ? "Cargando roles..." : "Rol"}
+            value={form.roleId || ""}
+            options={roleOptions}
+            onChange={(val) => handleChange("roleId", val)}
+          />
 
           <FloatingSelect
             label={loadingManager ? "Cargando datos..." : "Jefe Directo"}
