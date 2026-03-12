@@ -1,4 +1,4 @@
-import { useState, type SyntheticEvent } from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import { Input } from "../CustomInputs/Input";
 import { Send } from "lucide-react";
 import { useVacationRequest } from "../../hooks/useVacationRequest";
@@ -13,6 +13,34 @@ export const VacationForm = ({
   const [days, setDays] = useState("");
 
   const { sendRequest, isSubmitting } = useVacationRequest(onRecordCreated);
+
+  const calculateEndDate = (start: string, requestedDays: number) => {
+    if (!start || requestedDays <= 0) return "";
+
+    let date = new Date(start + "T00:00:00");
+    let addedDays = 0;
+
+    while (date.getDay() === 0 || date.getDay() === 6) {
+      date.setDate(date.getDate() + 1);
+    }
+
+    while (addedDays < requestedDays - 1) {
+      date.setDate(date.getDate() + 1);
+      const daysOfWeek = date.getDay();
+      if (daysOfWeek !== 0 && daysOfWeek !== 6) {
+        addedDays++;
+      }
+    }
+
+    return date.toISOString().split("T")[0];
+  };
+
+  useEffect(() => {
+    if (startDate && days) {
+      const calculated = calculateEndDate(startDate, Number(days));
+      setEndDate(calculated);
+    }
+  }, [startDate, days]);
 
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
