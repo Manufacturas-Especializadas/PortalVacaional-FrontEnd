@@ -23,7 +23,11 @@ export const MyRoutes = () => {
         </Route>
 
         <Route
-          element={<ProtectedRoute allowedRoles={["Employee", "Admin"]} />}
+          element={
+            <ProtectedRoute
+              allowedRoles={["Employee", "Admin", "Department Head", "Manager"]}
+            />
+          }
         >
           <Route path="/empleado-dashboard" element={<EmployeeDashboard />} />
         </Route>
