@@ -106,3 +106,15 @@ export interface EmployeeDashboardData {
   availableDays: number;
   history: VacationRequest[];
 }
+
+export interface PendingRequest {
+  requestId: number;
+  employeeName: string;
+  payrollNumber: number;
+  department: string;
+  startDate: string;
+  endDate: string;
+  daysRequested: number;
+  requestedAt: string;
+  status: string;
+}
