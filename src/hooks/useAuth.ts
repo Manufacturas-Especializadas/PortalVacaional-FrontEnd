@@ -9,9 +9,26 @@ export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const getUserData = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return {
+        token,
+        role: decoded[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ],
+        payrollNumber: decoded["PayrollNumber"],
+      };
+    } catch (error) {
+      return null;
+    }
+  };
+
   const login = async (data: Login) => {
     setIsLoading(true);
-
     const loginPromise = authService.login(data);
 
     toast.promise(loginPromise, {
@@ -22,7 +39,6 @@ export const useAuth = () => {
 
     try {
       const response = await loginPromise;
-
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response));
 
@@ -32,12 +48,13 @@ export const useAuth = () => {
 
       if (response.mustChangePassword || !response.email) {
         navigate("/setup-profile");
-
         return true;
       }
 
-      if (userRole == "Admin") {
+      if (userRole === "Admin") {
         navigate("/admin-dashboard");
+      } else if (["Manager", "Department Head"].includes(userRole)) {
+        navigate("/manager-dashboard");
       } else {
         navigate("/empleado-dashboard");
       }
@@ -50,5 +67,9 @@ export const useAuth = () => {
     }
   };
 
-  return { login, isLoading };
+  return {
+    login,
+    isLoading,
+    user: getUserData(),
+  };
 };
