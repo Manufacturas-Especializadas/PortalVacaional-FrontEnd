@@ -27,6 +27,7 @@ export const API_CONFIG = {
       getManagers: "/api/Admin/departmentHead-managers",
       getManagersSelect: "/api/Admin/managersSelect",
       pedingRequest: "/api/Approvals/peding",
+      approvalsRequest: "/api/Approvals/process",
     },
   },
 };
