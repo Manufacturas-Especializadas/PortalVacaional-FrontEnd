@@ -12,6 +12,7 @@ export const API_CONFIG = {
       setupProfile: "/api/Auth/setup-profile",
     },
     admin: {
+      getRoles: "/api/Admin/roles",
       getEmployeesWithTheirDays: "/api/Admin/employees",
       create: "/api/Admin/createEmployees",
       update: "/api/Admin/employees/",
@@ -20,6 +21,13 @@ export const API_CONFIG = {
     },
     employee: {
       getDashboard: "/api/Employee/dashboard",
+      requestVacation: "/api/Employee/request-vacation",
+    },
+    managers: {
+      getManagers: "/api/Admin/departmentHead-managers",
+      getManagersSelect: "/api/Admin/managersSelect",
+      pedingRequest: "/api/Approvals/peding",
+      approvalsRequest: "/api/Approvals/process",
     },
   },
 };

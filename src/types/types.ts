@@ -1,3 +1,13 @@
+export interface Roles {
+  id: number;
+  name: string;
+}
+
+export interface ManagerSelect {
+  id: number;
+  fullName: string;
+}
+
 export interface Employee {
   nomina: number;
   nombre: string;
@@ -11,7 +21,23 @@ export interface EmployeeList {
   payRollNumber: number;
   fullName: string;
   department: string;
+  roleId: number;
   yearsOfService: number;
+  totalVacationDays: number;
+  isActive: boolean;
+}
+
+export interface ManagersList {
+  id: number;
+  payRollNumber: number;
+  fullName: string;
+  email: string;
+  roleId: number;
+  roleName: string;
+  department: string;
+  departmentId: number;
+  yearsOfService: number;
+  hireDate: string;
   totalVacationDays: number;
   isActive: boolean;
 }
@@ -25,7 +51,14 @@ export interface CreateEmployee {
   payRollNumber: number;
   fullName: string;
   department: string;
+  email: string;
+  managerId: number | null;
+  roleId: number;
   hireDate: string;
+  balances: {
+    year: number;
+    assignedDays: number;
+  }[];
 }
 
 export interface UpdateEmployee {
@@ -33,6 +66,7 @@ export interface UpdateEmployee {
   payRollNumber: number;
   fullName: string;
   department: string;
+  roleId: number;
   hireDate: string;
   isActive: boolean;
   balances: VacationBalance[];
@@ -71,4 +105,16 @@ export interface EmployeeDashboardData {
   usedDays: number;
   availableDays: number;
   history: VacationRequest[];
+}
+
+export interface PendingRequest {
+  requestId: number;
+  employeeName: string;
+  payrollNumber: number;
+  department: string;
+  startDate: string;
+  endDate: string;
+  daysRequested: number;
+  requestedAt: string;
+  status: string;
 }

@@ -1,0 +1,73 @@
+import { VacationHistory } from "../../components/Employee/VacationHistory";
+import { VacationStats } from "../../components/Employee/VacationStats";
+import { useEmployeeDashboard } from "../../hooks/useEmployeeDashboard";
+import { useApprovals } from "../../hooks/useApprovals";
+import { ApprovalsList } from "../../components/ApprovalsList/ApprovalsList";
+
+export const ManagerDashboard = () => {
+  const { data: employeeData, loading: empLoading } = useEmployeeDashboard();
+
+  const {
+    requests,
+    loading: appLoading,
+    handleDecision,
+    refresh: refreshApp,
+  } = useApprovals();
+
+  if (empLoading || appLoading)
+    return <div className="p-10 text-center">Cargando panel de control...</div>;
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] bg-size-[24px_24px]">
+      <div className="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+              Panel de <span className="text-blue-600">Gestión</span> MESA
+            </h2>
+            <p className="text-slate-500 mt-1 font-medium">
+              Administra las solicitudes de tu equipo y consulta tu propio
+              balance.
+            </p>
+          </div>
+          <div className="h-px flex-1 bg-slate-200 mx-8 hidden lg:block mb-3" />
+        </header>
+
+        <VacationStats
+          total={employeeData?.totalDays || 0}
+          used={employeeData?.usedDays || 0}
+        />
+
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+          <aside className="xl:col-span-7">
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-slate-800">
+                Solicitudes por Aprobar
+              </h3>
+              <p className="text-sm text-slate-500">
+                Acciones pendientes de tu equipo directo.
+              </p>
+            </div>
+            <ApprovalsList
+              requests={requests}
+              onDecision={async (id, approved, comments) => {
+                await handleDecision(id, approved, comments);
+                refreshApp();
+              }}
+            />
+          </aside>
+
+          <main className="xl:col-span-5">
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-slate-800">Mi Historial</h3>
+              <p className="text-sm text-slate-500">
+                Tus solicitudes personales de descanso.
+              </p>
+            </div>
+            <VacationHistory history={employeeData?.history || []} />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -1,15 +1,57 @@
-import { useState, type SyntheticEvent } from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import { Input } from "../CustomInputs/Input";
 import { Send } from "lucide-react";
+import { useVacationRequest } from "../../hooks/useVacationRequest";
 
-export const VacationForm = () => {
+export const VacationForm = ({
+  onRecordCreated,
+}: {
+  onRecordCreated: () => void;
+}) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [days, setDays] = useState("");
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const { sendRequest, isSubmitting } = useVacationRequest(onRecordCreated);
+
+  const calculateEndDate = (start: string, requestedDays: number) => {
+    if (!start || requestedDays <= 0) return "";
+
+    let date = new Date(start + "T00:00:00");
+    let addedDays = 0;
+
+    while (date.getDay() === 0 || date.getDay() === 6) {
+      date.setDate(date.getDate() + 1);
+    }
+
+    while (addedDays < requestedDays - 1) {
+      date.setDate(date.getDate() + 1);
+      const daysOfWeek = date.getDay();
+      if (daysOfWeek !== 0 && daysOfWeek !== 6) {
+        addedDays++;
+      }
+    }
+
+    return date.toISOString().split("T")[0];
+  };
+
+  useEffect(() => {
+    if (startDate && days) {
+      const calculated = calculateEndDate(startDate, Number(days));
+      setEndDate(calculated);
+    }
+  }, [startDate, days]);
+
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ startDate, endDate, days });
+
+    const success = await sendRequest({ startDate, endDate, days });
+
+    if (success) {
+      setStartDate("");
+      setEndDate("");
+      setDays("");
+    }
   };
 
   return (
@@ -49,10 +91,12 @@ export const VacationForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+          className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl 
+            font-semibold shadow-lg shadow-blue-200 transition-all flex items-center 
+            justify-center gap-2 ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:cursor-pointer"}`}
         >
           <Send size={18} />
-          Enviar a Revisión
+          {isSubmitting ? "Enviando..." : "Enviar a Revisión"}
         </button>
       </form>
     </div>

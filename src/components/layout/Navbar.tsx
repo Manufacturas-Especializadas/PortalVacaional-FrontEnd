@@ -1,5 +1,6 @@
 import { LogOut } from "lucide-react";
 import Logo from "../../assets/img/logomesa.png";
+import { Link } from "react-router-dom";
 
 interface Props {
   userName: string;
@@ -25,7 +26,9 @@ export const Navbar = ({ userName, role, onLogout }: Props) => {
             </div>
             <div className="hidden md:block h-6 w-px bg-slate-200" />{" "}
             <h1 className="text-lg font-semibold tracking-tight text-slate-800">
-              Portal <span className="text-blue-600">Vacacional</span>
+              <Link to="/empleado-dashboard">
+                Portal <span className="text-blue-600">Vacacional</span>
+              </Link>
             </h1>
           </div>
 

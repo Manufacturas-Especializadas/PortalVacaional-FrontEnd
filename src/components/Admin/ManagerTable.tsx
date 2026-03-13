@@ -6,173 +6,52 @@ import {
   RefreshCw,
   Trash,
   UserPlus,
-  Users,
 } from "lucide-react";
-import { useEmployeeList } from "../../hooks/useEmployeeList";
-import { useState } from "react";
-import { useUpdateEmployee } from "../../hooks/useUpdateEmployee";
-import { EmployeeModal } from "./EmployeeModal";
-import { useCreateEmployee } from "../../hooks/useCreateEmployee";
-import { useDeleteEmployee } from "../../hooks/useDeleteEmployee";
-import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
-import { useReactivateEmployee } from "../../hooks/useReactivateEmployee";
 import { useNavigate } from "react-router-dom";
+import { userManagerList } from "../../hooks/useManagerList";
+import { useState } from "react";
 
-export const EmployeesTable = () => {
-  const {
-    employees: employeeList,
-    error,
-    loading,
-    refresh,
-  } = useEmployeeList();
-  const { createEmployee } = useCreateEmployee();
-  const { updateEmployee, isUpdating } = useUpdateEmployee();
-  const { deleteEmployee } = useDeleteEmployee();
-  const { reactivateEmployee } = useReactivateEmployee();
-
-  const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
-  const [employeeToDelete, setEmployeeToDelete] = useState<any | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleAddClick = () => {
-    setSelectedEmployee({
-      payRollNumber: 0,
-      fullName: "",
-      department: "",
-      roleId: 2,
-      managerId: 0,
-      hireDate: "",
-      isActive: true,
-      balances: [],
-    });
-  };
-
-  const handleEditClick = (emp: any) => {
-    setSelectedEmployee({
-      id: emp.id,
-      payRollNumber: emp.payRollNumber,
-      fullName: emp.fullName,
-      department: emp.department,
-      managerId: emp.managerId,
-      roleId: emp.roleId,
-      totalVacationDays: emp.totalVacationDays,
-      hireDate: emp.hireDate || null,
-      isActive: emp.isActive,
-      balances: emp.balances || [],
-    });
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!employeeToDelete) return;
-
-    setIsDeleting(true);
-    const success = await deleteEmployee(employeeToDelete.id);
-
-    if (success) {
-      setEmployeeToDelete(null);
-      refresh();
-    }
-
-    setIsDeleting(false);
-  };
-
-  const handleReactivate = async (id: number) => {
-    const success = await reactivateEmployee(id);
-    if (success) refresh();
-  };
-
-  const handleSave = async (formData: any) => {
-    let success = false;
-
-    const commonData = {
-      payRollNumber: Number(formData.payRollNumber),
-      fullName: formData.fullName.trim(),
-      department: formData.department,
-      email: formData.email || "",
-      roleId: formData.roleId ? Number(formData.roleId) : 2,
-      managerId:
-        formData.managerId && formData.managerId !== 0
-          ? Number(formData.managerId)
-          : null,
-      hireDate: formData.hireDate.includes("T")
-        ? formData.hireDate
-        : `${formData.hireDate}T00:00:00.000Z`,
-      isActive: formData.isActive ?? true,
-      balances:
-        formData.balances && formData.balances.length > 0
-          ? formData.balances
-          : [
-              {
-                year: new Date().getFullYear(),
-                assignedDays: formData.totalVacationDays || 0,
-              },
-            ],
-    };
-
-    console.log("Dato a enviar: ", commonData);
-
-    if (formData.id) {
-      const dataToUpdate = { ...commonData, id: formData.id };
-      success = await updateEmployee(formData.id, dataToUpdate);
-    } else {
-      success = await createEmployee(commonData);
-    }
-
-    if (success) {
-      setSelectedEmployee(null);
-      refresh();
-    }
-  };
+export const ManagerTable = () => {
+  const { managers: managersList, error, loading, refresh } = userManagerList();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const indexOfLasItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLasItem - itemsPerPage;
-  const currentItems = employeeList.slice(indexOfFirstItem, indexOfLasItem);
-  const totalPages = Math.ceil(employeeList.length / itemsPerPage);
+  const currentItems = managersList.slice(indexOfFirstItem, indexOfLasItem);
+  const totalPages = Math.ceil(managersList.length / itemsPerPage);
 
   const navigate = useNavigate();
-
   return (
     <div
-      className="bg-white rounded-2xl border 
-      border-slate-100 shadow-sm overflow-hidden"
+      className="bg-white rounded-2xl 
+      border border-slate-100 shadow-sm overflow-hidden"
     >
       <div
-        className="p-6 border-b border-slate-50 flex 
+        className="p-6 border-b border-slate-50 flex
         justify-between items-center bg-slate-50/50"
       >
         <div>
           <h3 className="text-xl font-bold text-slate-800">
-            Listado de Empleados
+            Lista de Jefes y gerentes
           </h3>
           <p className="text-sm text-slate-500">
             {loading
               ? "Cargando..."
-              : `Total: ${employeeList.length} colaboradores`}
+              : `Total: ${managersList.length} colaboradores`}
           </p>
         </div>
 
         <div className="flex gap-3">
           <button
-            onClick={() => navigate("/managers")}
-            className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 
-            py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
-            gap-2 hover:cursor-pointer shadow-sm"
-          >
-            <Users size={18} className="text-blue-600" />
-            Jefes y Gerentes
-          </button>
-
-          <button
-            onClick={handleAddClick}
+            onClick={() => navigate("/admin-dashboard")}
             className="bg-slate-900 hover:bg-slate-800 text-white px-5 
             py-2.5 rounded-xl font-bold text-sm transition-all flex items-center 
             gap-2 hover:cursor-pointer shadow-lg shadow-slate-200"
           >
             <UserPlus size={18} />
-            Nuevo Empleado
+            Empleados
           </button>
         </div>
       </div>
@@ -184,7 +63,7 @@ export const EmployeesTable = () => {
               className="text-slate-400 uppercase text-[11px] font-bold 
               tracking-widest bg-white"
             >
-              <th className="px-6 py-4">Empleado</th>
+              <th className="px-6 py-4">Jefe / Gerente</th>
               <th className="px-6 py-4">Departamento</th>
               <th className="px-6 py-4">Estado</th>
               <th className="px-6 py-4">Antigüedad</th>
@@ -192,8 +71,7 @@ export const EmployeesTable = () => {
               <th className="px-6 py-4"></th>
             </tr>
           </thead>
-
-          <tbody className="divide-y divide-slate-50">
+          <tbody>
             {loading &&
               [...Array(5)].map((_, i) => (
                 <tr key={i} className="animate-pulse">
@@ -302,7 +180,6 @@ export const EmployeesTable = () => {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
-                      onClick={() => handleEditClick(emp)}
                       className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg
                       transition-all hover:cursor-pointer"
                     >
@@ -311,7 +188,6 @@ export const EmployeesTable = () => {
 
                     {emp.isActive ? (
                       <button
-                        onClick={() => setEmployeeToDelete(emp)}
                         className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg
                         transition-all hover:cursor-pointer"
                       >
@@ -319,7 +195,6 @@ export const EmployeesTable = () => {
                       </button>
                     ) : (
                       <button
-                        onClick={() => handleReactivate(emp.id)}
                         className="p-2 text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg
                         transition-all hover:cursor-pointer"
                         title="Reactivar empleado"
@@ -333,6 +208,7 @@ export const EmployeesTable = () => {
           </tbody>
         </table>
       </div>
+
       {!loading && !error && (
         <div
           className="p-4 border-t border-slate-50 flex items-center 
@@ -340,8 +216,8 @@ export const EmployeesTable = () => {
         >
           <p>
             Mostrando {indexOfFirstItem + 1} -{" "}
-            {Math.min(indexOfLasItem, employeeList.length)} de{" "}
-            {employeeList.length}
+            {Math.min(indexOfLasItem, managersList.length)} de{" "}
+            {managersList.length}
           </p>
 
           <div className="flex items-center gap-2">
@@ -383,23 +259,6 @@ export const EmployeesTable = () => {
             </button>
           </div>
         </div>
-      )}
-      {selectedEmployee && (
-        <EmployeeModal
-          employee={selectedEmployee}
-          onClose={() => setSelectedEmployee(null)}
-          onSave={handleSave}
-          loading={isUpdating}
-        />
-      )}
-
-      {employeeToDelete && (
-        <ConfirmDeleteModal
-          employeeName={employeeToDelete.fullName}
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setEmployeeToDelete(null)}
-          loading={isDeleting}
-        />
       )}
     </div>
   );
